@@ -1,0 +1,65 @@
+.MuiInputBase-input,
+.MuiFilledInput-input {
+  font-family: "Lato" !important;
+  letter-spacing: 0.03em !important;
+  color: black !important;
+}
+/* 
+.MuiSelect-select,
+.MuiSelect-filled {
+  border-color: #ffffff !important;
+} */
+
+.MuiFormHelperText-root,
+.MuiFormHelperText-contained,
+.MuiFormHelperText-filled {
+  font-family: "Lato" !important;
+  letter-spacing: 0.1em !important;
+  /* color: white !important; */
+  font-size: 12px !important;
+}
+
+.MuiFormLabel-root {
+  font-family: "Lato" !important;
+  letter-spacing: 0.05em !important;
+  /* color: white !important; */
+}
+
+/* .MuiInputLabel-shrink {
+  color: rgb(245, 245, 245) !important;
+} */
+
+.MuiFormControl-root {
+  width: 50vw !important;
+}
+
+.para {
+  font-family: "Lato";
+  letter-spacing: 0.03em;
+}
+
+.checkBoxItem {
+  padding: 5px 0;
+}
+
+.txnFormContainer {
+  padding-top: 5vh;
+  font-family: "Lato";
+  color: white;
+}
+
+.checkBoxContainer {
+  padding: 20px 0 !important;
+}
+
+@media only screen and (orientation: landscape) {
+  .MuiFormControl-root {
+    width: 25vw !important;
+  }
+
+  .txnFormContainer {
+    padding-top: 4vw;
+    font-family: "Lato";
+    color: white;
+  }
+}

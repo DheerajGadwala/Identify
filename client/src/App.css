@@ -1,0 +1,61 @@
+.App,
+body {
+  background-color: #3f8f74;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.headerContainer {
+  text-align: center;
+  color: white;
+  padding: 10vh 0;
+}
+
+.header {
+  font-family: "Pacifico";
+  font-size: 70px;
+}
+
+.buttonPrimary {
+  font-family: "Lato" !important;
+  color: white !important;
+  background-color: #000000 !important;
+  padding-left: 5vw !important;
+  padding-right: 5vw !important;
+  margin: 2vh 0 !important;
+}
+
+.buttonSecondary {
+  font-family: "Lato" !important;
+  color: black !important;
+  background-color: white !important;
+  padding-left: 2vw !important;
+  padding-right: 2vw !important;
+  margin: 2vh 0 !important;
+}
+
+.MuiTypography-root,
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3,
+.MuiTypography-h4,
+.MuiTypography-h5,
+.MuiTypography-h6 {
+  font-family: "Lato" !important;
+}
+
+.loader {
+  position: "absolute";
+  top: "50%";
+  left: "50%";
+  width: "100px";
+  height: "100px";
+  margin-top: "-50px";
+  margin-left: "-50px";
+}
+
+.homeContainer {
+  text-align: center;
+}

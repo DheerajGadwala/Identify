@@ -1,0 +1,28 @@
+.txnList {
+  padding: 20px;
+  font-family: "Lato";
+  color: white;
+}
+
+.filterDropDown {
+  max-width: 200px;
+}
+
+.filterDropDownContainer {
+  padding: 10px 0;
+}
+
+.MuiPaper-root {
+  background-color: #3f8f74 !important;
+}
+
+.txnListLoader {
+  padding-top: 25vh;
+  text-align: center;
+}
+
+.filterChip {
+  padding: 5px !important;
+  margin: 5px !important;
+  font-family: "Lato" !important;
+}
