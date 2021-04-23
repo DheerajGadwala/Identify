@@ -1,0 +1,9 @@
+.ackTxnContainer {
+  padding-top: 10vh !important;
+}
+
+@media only screen and (orientation: landscape) {
+  .ackTxnContainer {
+    padding-top: 5vw !important;
+  }
+}

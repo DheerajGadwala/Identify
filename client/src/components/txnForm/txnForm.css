@@ -1,15 +1,3 @@
-.MuiInputBase-input,
-.MuiFilledInput-input {
-  font-family: "Lato" !important;
-  letter-spacing: 0.03em !important;
-  color: black !important;
-}
-/* 
-.MuiSelect-select,
-.MuiSelect-filled {
-  border-color: #ffffff !important;
-} */
-
 .MuiFormHelperText-root,
 .MuiFormHelperText-contained,
 .MuiFormHelperText-filled {
@@ -19,18 +7,8 @@
   font-size: 12px !important;
 }
 
-.MuiFormLabel-root {
-  font-family: "Lato" !important;
-  letter-spacing: 0.05em !important;
-  /* color: white !important; */
-}
-
-/* .MuiInputLabel-shrink {
-  color: rgb(245, 245, 245) !important;
-} */
-
 .MuiFormControl-root {
-  width: 50vw !important;
+  width: 55vw !important;
 }
 
 .para {
@@ -43,23 +21,55 @@
 }
 
 .txnFormContainer {
-  padding-top: 5vh;
-  font-family: "Lato";
-  color: white;
+  padding: 5vh 0 10vh 0 !important;
+  font-family: "Lato" !important;
+  color: white !important;
 }
 
 .checkBoxContainer {
   padding: 20px 0 !important;
 }
 
+.error,
+.success {
+  font-family: "Lato" !important;
+  letter-spacing: 0.05em;
+}
+
+.error {
+  color: white !important;
+  background-color: #d52a1d !important;
+}
+
+.success {
+  color: black !important;
+  background-color: white !important;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin-top: -50px; /* Half the height */
+  margin-left: -50px;
+}
+
+.noTxnsMsg {
+  text-align: center;
+  letter-spacing: 0.03em;
+  font-family: "Lato";
+  padding-top: 10vh;
+}
 @media only screen and (orientation: landscape) {
   .MuiFormControl-root {
     width: 25vw !important;
   }
 
   .txnFormContainer {
-    padding-top: 4vw;
-    font-family: "Lato";
-    color: white;
+    padding: 4vw 4vw !important;
+    font-family: "Lato" !important;
+    color: white !important;
   }
 }

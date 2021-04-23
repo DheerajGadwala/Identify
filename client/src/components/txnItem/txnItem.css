@@ -1,18 +1,52 @@
 .identicon {
-  width: 30px;
-  height: 30px;
+  width: 90px !important;
+  height: 90px !important;
+  padding: 10px !important;
+}
+
+.identiconContainer {
+  text-align: center;
 }
 
 .txnItem {
-  padding: 10px;
+  padding: 20px !important;
+  text-align: center;
   font-size: 12px;
-  border: 1px dotted white;
   margin: 10px 0;
+}
+
+.errorChip {
+  background-color: #d52a1d !important;
+  letter-spacing: 0.03em !important;
+  color: white !important;
+  padding: 10px !important;
+  font-size: 11px !important;
+  margin: 20px 0 !important;
+}
+
+.errorIcon {
+  color: white !important;
 }
 
 @media only screen and (orientation: landscape) {
   .identicon {
-    width: 50px;
-    height: 50px;
+    width: 128px !important;
+    height: 128px !important;
+    padding: 10px !important;
+  }
+
+  .errorChip {
+    background-color: #d52a1d !important;
+    letter-spacing: 0.03em !important;
+    margin-top: 20px !important;
+    color: white !important;
+    padding: 15px !important;
+    font-size: 12px !important;
+  }
+  .txnItem {
+    padding: 20px 20px 20px 40px !important;
+    text-align: left;
+    font-size: 12px;
+    margin: 10px 0;
   }
 }

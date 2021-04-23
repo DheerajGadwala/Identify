@@ -56,6 +56,10 @@ body {
   margin-left: "-50px";
 }
 
+.appLoader {
+  padding-top: 5vh;
+}
+
 .homeContainer {
   text-align: center;
 }

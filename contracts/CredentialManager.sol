@@ -38,6 +38,7 @@ contract CredentialManager {
         string credentials;
     }
     
+    address public centralAuthId = 0xf17f52151EbEF6C7334FAD080c5704D77216b732;
     Beneficiary[] public beneficiaries;
     DistributionPoint[] public dstnPoints;
     District[] public districts;
@@ -68,7 +69,7 @@ contract CredentialManager {
     function addBeneficiary(uint _id, string memory _credentials) public{
         beneficiaries.push(Beneficiary(_id, _credentials));
     }
-    
+
     function getDistricts(uint _stateId) public view returns(uint[] memory) {
         require(states.length>0, "No district registered");
         require(_stateId>=0 && _stateId<states.length, "Invalid state id");
@@ -94,18 +95,21 @@ contract CredentialManager {
         return beneficiaries;
     }
     
-    function authorizeSigner(string memory _type, address signer, uint _entityId) public view returns(bool){
+    function authorizeSigner(string memory _type, address _signer, uint _entityId) public view returns(bool){
         
         bool isAuthorized;
+
+        if(keccak256(abi.encode(_type)) == keccak256(abi.encode("Central")))
+        isAuthorized = centralAuthId == _signer;
         
         if(keccak256(abi.encode(_type)) == keccak256(abi.encode("State")))
-        isAuthorized = states[_entityId].authorityId == signer;
+        isAuthorized = states[_entityId].authorityId == _signer;
         
         if(keccak256(abi.encode(_type)) == keccak256(abi.encode("District")))
-        isAuthorized = districts[_entityId].authorityId == signer;
+        isAuthorized = districts[_entityId].authorityId == _signer;
         
         if(keccak256(abi.encode(_type)) == keccak256(abi.encode("Distn. Point")))
-        isAuthorized = dstnPoints[_entityId].authorityId == signer;
+        isAuthorized = dstnPoints[_entityId].authorityId == _signer;
        
         return isAuthorized;
         

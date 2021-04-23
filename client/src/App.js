@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import getWeb3 from "./getWeb3";
 import { Button, Grid } from "@material-ui/core";
-
+import Loader from "./loader.gif";
 import "./App.css";
 import TxnForm from "./components/txnForm/txnForm";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import TxnList from "./components/txnList/txnList";
 import TruffleContract from "@truffle/contract";
 import CredManager from "./contracts/CredentialManager.json";
+import AckTxn from "./components/ackTxn/ackTxn.js";
 
 const App = () => {
   const [web3, setWeb3] = useState(null);
@@ -20,20 +21,17 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const web3 = await getWeb3();
       const credManagerContract = TruffleContract(CredManager);
       credManagerContract.setProvider(web3.eth.currentProvider);
       const credManagerInstance = await credManagerContract.deployed();
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log(accounts[0]);
-      console.log(credManagerInstance.address);
       loadData(credManagerInstance, "NewState", setStates);
       loadData(credManagerInstance, "NewDistrict", setDistricts);
       loadData(credManagerInstance, "NewDstnPoint", setDstnPoints);
       setWeb3(web3);
       setCredManagerInst(credManagerInstance);
+      setLoading(false);
     })();
   }, []);
 
@@ -98,17 +96,37 @@ const App = () => {
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: "#ffffff",
-        light: "#fff",
-        dark: "#000",
-        contrastText: "#fff",
+        main: "#000",
       },
-      text: {
-        primary: "#fff",
-        secondary: "ffffffde",
-        light: "#000",
-        dark: "#fff",
-        hint: "#ffffffc6",
+      secondary: {
+        main: "#fff",
+      },
+    },
+    typography: {
+      fontFamily: "Lato",
+    },
+    props: {
+      MuiSelect: {
+        color: "secondary",
+      },
+      MuiInputLabel: {
+        color: "secondary",
+      },
+      MuiTextField: {
+        color: "secondary",
+      },
+    },
+    overrides: {
+      MuiFormLabel: {
+        root: {
+          letterSpacing: "0.05em",
+        },
+      },
+      MuiInputBase: {
+        input: {
+          letterSpacing: "0.03em",
+          color: "#000",
+        },
       },
     },
   });
@@ -130,7 +148,6 @@ const App = () => {
     });
     let j = 0;
     for (let i = 0; i < 10; i += 2) {
-      console.log("addDstnPoint(["+userIds[i]+", "+userIds[i+1]+"], "+dstnAuthIds[j]+")");
       await credManagerInst.addDstnPoint(
         [userIds[i], userIds[i + 1]],
         dstnAuthIds[j],
@@ -173,26 +190,43 @@ const App = () => {
           <Grid item className="headerContainer">
             <h1 className="header">identify</h1>
           </Grid>
-          <Grid item>
-            <Button
-              className="buttonPrimary"
-              onClick={() => setView("txnForm")}
-            >
-              Send Resources
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              className="buttonPrimary"
-              onClick={() => setView("txnList")}
-            >
-              View Transactions
-            </Button>
-          </Grid>
-          { <Button onClick={() => createUsers()}>Add Users</Button> }
-          { <Button onClick={() => addDstnPoints()}>Add dntnPoints</Button> }
-          { <Button onClick={() => addDistricts()}>Add Districts</Button> }
-          <Button onClick={() => addStates()}>Add states</Button>
+          {loading ? (
+            <Grid item className="appLoader">
+              <img src={Loader} alt="loader" />
+            </Grid>
+          ) : (
+            <>
+              <Grid item>
+                <Button
+                  className="buttonPrimary"
+                  onClick={() => setView("txnForm")}
+                >
+                  Send Resources
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  className="buttonPrimary"
+                  onClick={() => setView("txnList")}
+                >
+                  View Transactions
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  className="buttonPrimary"
+                  onClick={() => setView("ackRecpt")}
+                >
+                  Acknowledge Receipt
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {/* <Button onClick={() => createUsers()}>Add Users</Button> */}
+          {/* <Button onClick={() => addDstnPoints()}>Add dntnPoints</Button>
+          <Button onClick={() => addDistricts()}>Add Districts</Button>
+          <Button onClick={() => addStates()}>Add states</Button> */}
         </Grid>
       );
     else if (view === "txnForm")
@@ -206,7 +240,7 @@ const App = () => {
           credManagerInstance={credManagerInst}
         />
       );
-    else
+    else if (view === "txnList")
       return (
         <TxnList
           web3={web3}
@@ -214,6 +248,14 @@ const App = () => {
           states={states}
           districts={districts}
           dstnPoints={dstnPoints}
+        />
+      );
+    else if (view === "ackRecpt")
+      return (
+        <AckTxn
+          web3={web3}
+          setView={setView}
+          credManagerInstance={credManagerInst}
         />
       );
   };

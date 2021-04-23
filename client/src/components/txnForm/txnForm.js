@@ -6,9 +6,17 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Button, Checkbox, Grid, TextField } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Grid,
+  TextField,
+  Snackbar,
+  SnackbarContent,
+} from "@material-ui/core";
 import "./txnForm.css";
 import Loader from "../../loader.gif";
+import Nav from "../nav/nav.js";
 
 export default function TxnForm(props) {
   const [resourceList, setResourceList] = useState([]);
@@ -21,19 +29,27 @@ export default function TxnForm(props) {
     checkedList: [],
     checkedCount: 0,
   });
-
+  const [successSnack, setSuccessSnack] = useState({
+    view: false,
+    msg: "",
+  });
+  const [errorSnack, setErrorSnack] = useState({
+    view: false,
+    msg: "",
+  });
   const levels = ["Central", "State", "District", "Distn. Point"];
   const entities = [props.states, props.districts, props.dstnPoints];
   const storageListNames = ["_districtIds", "_dstnPointId", "_beneficiaries"];
 
   useEffect(() => {
     (async () => {
-      // const netId = await props.web3.eth.net.getId();
       const resourcesContract = TruffleContract(ResourcesContract);
       resourcesContract.setProvider(props.web3.currentProvider);
       const resourcesContractInstance = await resourcesContract.deployed();
       const _resourceList = await resourcesContractInstance.getResourceList();
+
       setResourceList(_resourceList);
+
       setForm((prevForm) => {
         const len = _resourceList.length;
         return {
@@ -77,14 +93,19 @@ export default function TxnForm(props) {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+
       const fromEntity =
         form.entityLevel === "0"
-          ? "central"
+          ? "Central"
           : `${levels[form.entityLevel]}-${form.fromEntity}`;
+
       const toEntity =
         form.entityLevel === "3"
           ? form.toEntity
           : `${levels[parseInt(form.entityLevel) + 1]}-${form.toEntity}`;
+
+      const sentTimestamp = new Date().getTime();
+      const recvdTimestamp = form.entityLevel === 3 ? sentTimestamp : 0;
       // console.log(
       //   "",
       //   fromEntity,
@@ -99,30 +120,39 @@ export default function TxnForm(props) {
       // );
 
       const txnResult = await inventoryContractInstance.sendTxn(
-        "",
         fromEntity,
-        form.fromEntity,
+        parseInt(form.fromEntity),
         toEntity,
         levels[form.entityLevel],
-        new Date().getTime(),
-        0,
+        sentTimestamp,
+        recvdTimestamp,
         form.resourceQuantities,
         props.credManagerInstance.address,
         {
           from: accounts[0],
         }
       );
+
       setLoading(false);
-        console.log(txnResult);
+
       const txnId = txnResult.logs[0].args.txnId;
-      const statusCode = txnResult.logs[0].args.statusCode.toNumber();
-      if (statusCode === 200) {
-        const txnDetails = await inventoryContractInstance.resourceTxns(txnId);
-        const txnResources = await inventoryContractInstance.getTxnResources(
-          txnId
-        );
-        console.log(txnDetails, txnResources);
-      } else window.alert("unauth");
+      const _statusCode = txnResult.logs[0].args.statusCode;
+
+      console.log(_statusCode);
+
+      if (_statusCode.toNumber() === 200)
+        setSuccessSnack({
+          view: true,
+          msg: {
+            txnId: txnId,
+            txt: "Txn successful!",
+          },
+        });
+      else if (_statusCode.toNumber() === 401)
+        setErrorSnack({
+          view: true,
+          msg: `Unauthorized txn request.`,
+        });
     })();
   };
 
@@ -234,7 +264,6 @@ export default function TxnForm(props) {
                 value={item}
                 checked={form.checkedList[i]}
                 onChange={(e) => handleCheckboxChange(e, i)}
-                color="primary"
               />
             }
             label={item}
@@ -286,44 +315,102 @@ export default function TxnForm(props) {
     </FormControl>
   );
 
+  const copyToClipboard = async (data) => {
+    await navigator.clipboard.writeText(data);
+  };
+
   if (!loading)
     return (
-      <Grid container className="txnFormContainer">
-        <Grid item container alignItems="center" direction="column">
+      <>
+        <Grid container direction="column" alignItems="center">
           <Grid item>
-            <EntityLevelFormControl /> <br /> <br />
+            <Nav setView={props.setView} />
           </Grid>
-          {form.entityLevel && (
-            <>
-              <Grid item>
-                <FromEntityFormControl /> <br /> <br />
-              </Grid>
-              <Grid item>
-                <ToEntityFormControl /> <br /> <br />
-              </Grid>
-            </>
-          )}
-          {form.entityLevel && (
-            <>
-              <Grid item>
-                <br />
-                Select Resources
-              </Grid>
-              <Grid item container className="checkBoxContainer">
-                {CheckBoxContainer()}
-              </Grid>
-            </>
-          )}
-          <Grid item>
-            <Button
-              onClick={() => handleTransactionSubmit()}
-              className="buttonPrimary"
-            >
-              send resources
-            </Button>
+          <Grid
+            item
+            container
+            className="txnFormContainer"
+            direction="column"
+            alignItems="center"
+          >
+            <Grid item>
+              <EntityLevelFormControl /> <br /> <br />
+            </Grid>
+            {form.entityLevel && (
+              <>
+                <Grid item>
+                  <FromEntityFormControl /> <br /> <br />
+                </Grid>
+                <Grid item>
+                  <ToEntityFormControl /> <br /> <br />
+                </Grid>
+              </>
+            )}
+            {form.entityLevel && (
+              <>
+                <Grid item>
+                  <br />
+                  Select Resources
+                </Grid>
+                <Grid item container className="checkBoxContainer">
+                  {CheckBoxContainer()}
+                </Grid>
+              </>
+            )}
+            <Grid item>
+              <Button
+                onClick={() => handleTransactionSubmit()}
+                className="buttonPrimary"
+              >
+                send resources
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+        <Snackbar
+          open={successSnack.view}
+          autoHideDuration={6000}
+          onClose={() =>
+            setSuccessSnack({
+              view: false,
+              msg: "",
+            })
+          }
+        >
+          <SnackbarContent
+            className="success"
+            message={
+              successSnack.msg.txt && (
+                <span>
+                  {successSnack.msg.txt} <br />
+                  Txnid:{" "}
+                  {successSnack.msg.txnId.substring(0, 10) +
+                    "..." +
+                    successSnack.msg.txnId.substring(56)}
+                  <Button
+                    className="buttonPrimary"
+                    onClick={() => copyToClipboard(successSnack.msg.txnId)}
+                  >
+                    copy txnId
+                  </Button>
+                </span>
+              )
+            }
+          />
+        </Snackbar>
+        <Snackbar
+          open={errorSnack.view}
+          autoHideDuration={6000}
+          onClose={() =>
+            setErrorSnack({
+              view: false,
+              msg: "",
+            })
+          }
+        >
+          <SnackbarContent className="error" message={errorSnack.msg} />
+        </Snackbar>
+      </>
     );
 
   return <img src={Loader} alt="loader" className="loader" />;
