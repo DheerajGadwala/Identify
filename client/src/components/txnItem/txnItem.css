@@ -15,13 +15,24 @@
   margin: 10px 0;
 }
 
-.errorChip {
+.successChip {
+  background-color: #3f8f74 !important;
+}
+
+.error {
   background-color: #d52a1d !important;
+}
+
+.errorChip,
+.successChip {
   letter-spacing: 0.03em !important;
   color: white !important;
   padding: 10px !important;
   font-size: 11px !important;
   margin: 20px 0 !important;
+}
+.errorChip {
+  background-color: #d52a1d !important;
 }
 
 .errorIcon {
@@ -36,10 +47,7 @@
   }
 
   .errorChip {
-    background-color: #d52a1d !important;
-    letter-spacing: 0.03em !important;
     margin-top: 20px !important;
-    color: white !important;
     padding: 15px !important;
     font-size: 12px !important;
   }
@@ -47,6 +55,5 @@
     padding: 20px 20px 20px 40px !important;
     text-align: left;
     font-size: 12px;
-    margin: 10px 0;
   }
 }

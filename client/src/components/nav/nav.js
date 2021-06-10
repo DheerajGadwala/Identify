@@ -41,6 +41,15 @@ function Nav(props) {
       >
         Ack Receipt
       </Link>
+      <Link
+        className="link"
+        underline="none"
+        onClick={() => {
+          props.setView("add beneficiary");
+        }}
+      >
+        Add Beneficiary
+      </Link>
     </Breadcrumbs>
   );
 }

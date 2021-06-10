@@ -23,7 +23,7 @@ module.exports = {
     besu: {
       provider: privateKeyProvider,
       network_id: "*",
-      gas: "0x47b760",
+      gas: "0x4C4B40",
     },
   },
   compilers: {

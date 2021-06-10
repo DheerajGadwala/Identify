@@ -36,13 +36,13 @@ function TxnList(props) {
       dstnPoint: [],
     },
     entityLevel: {
-      central: "",
+      Central: "",
       State: "",
       District: "",
       "Distn. Point": "",
     },
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dialogView, setDialogView] = useState(false);
   const [ackTxnList, setAckTxnList] = useState({});
 
@@ -68,9 +68,8 @@ function TxnList(props) {
       const inventoryContractInstance = await inventoryContract.deployed();
 
       const entityLevelFilters = [];
-      Object.entries(filter.entityLevel).map((item) => {
+      Object.entries(filter.entityLevel).forEach((item) => {
         if (!(item[1] === "")) entityLevelFilters.push(item[1]);
-        return null;
       });
 
       let newTxnEvents = await inventoryContractInstance.getPastEvents(
@@ -78,7 +77,6 @@ function TxnList(props) {
         {
           topics: [
             null,
-            !(filter.initiator.length === 0) ? filter.initiator : null,
             filter.fromEntity.isSet
               ? [
                   filter.fromEntity.central[0] &&
@@ -133,13 +131,14 @@ function TxnList(props) {
 
   const FilterDropDown = (entityName, entityValues, filterName) => {
     const options = [];
-    for (let i = 0; i < entityValues.length; i++)
+
+    entityValues.forEach((value, i) =>
       options.push(
-        <option
-          value={`${entityName}-${i}`}
-          key={i}
-        >{`${entityName}-${i}`}</option>
-      );
+        <option value={value.returnValues._name} key={i}>
+          {value.returnValues._name}
+        </option>
+      )
+    );
 
     const handleChange = (e) => {
       const val = e.target.value;
@@ -213,7 +212,9 @@ function TxnList(props) {
               key={val.txnId}
               txnId={val.txnId}
               fromEntity={val.fromEntity}
+              fromEntityId={val.fromEntityId}
               toEntity={val.toEntity}
+              toEntityId={val.toEntityId}
               initiator={val.initiator}
               sent={val.sentTimestamp}
               recvd={

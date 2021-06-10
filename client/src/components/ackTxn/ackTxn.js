@@ -9,6 +9,7 @@ import Loader from "../../loader.gif";
 import TruffleContract from "@truffle/contract";
 
 function AckTxn(props) {
+  console.log(props.credManagerInstance.address);
   const [scanner, setScanner] = useState(false);
   const [successSnack, setSuccessSnack] = useState({
     view: false,
@@ -26,6 +27,7 @@ function AckTxn(props) {
 
   const handleScan = async (data) => {
     if (data) {
+      console.log(data);
       setLoading(true);
       const inventoryContract = TruffleContract(InventoryContract);
       inventoryContract.setProvider(props.web3.currentProvider);
@@ -35,7 +37,7 @@ function AckTxn(props) {
       });
 
       const QrData = JSON.parse(data);
-      if (QrData.level === "") {
+      if (QrData.level === "Beneficiary") {
         setErrorSnack({
           view: true,
           msg: "You can't acknowledge the current txn!",
@@ -55,7 +57,6 @@ function AckTxn(props) {
             from: accounts[0],
           }
         );
-
         const statusCode = txnResult.logs[0].args.statusCode.toNumber();
         if (statusCode === 200)
           setSuccessSnack({

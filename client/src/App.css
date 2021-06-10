@@ -10,7 +10,7 @@ body {
 .headerContainer {
   text-align: center;
   color: white;
-  padding: 10vh 0;
+  padding: 5vh 0;
 }
 
 .header {
@@ -18,22 +18,37 @@ body {
   font-size: 70px;
 }
 
-.buttonPrimary {
+.buttonPrimary,
+.buttonSecondary,
+.buttonSuccess,
+.buttonError {
   font-family: "Lato" !important;
   color: white !important;
-  background-color: #000000 !important;
-  padding-left: 5vw !important;
-  padding-right: 5vw !important;
   margin: 2vh 0 !important;
 }
 
+.buttonPrimary {
+  background-color: #000000 !important;
+  padding-left: 5vw !important;
+  padding-right: 5vw !important;
+}
 .buttonSecondary {
-  font-family: "Lato" !important;
-  color: black !important;
   background-color: white !important;
+  color: #000 !important;
   padding-left: 2vw !important;
   padding-right: 2vw !important;
-  margin: 2vh 0 !important;
+}
+
+.buttonSuccess {
+  background-color: #3f8f74 !important;
+  padding-left: 5vw !important;
+  padding-right: 5vw !important;
+}
+
+.buttonError {
+  background-color: #d52a1d !important;
+  padding-left: 2vw !important;
+  padding-right: 2vw !important;
 }
 
 .MuiTypography-root,

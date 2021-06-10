@@ -1,0 +1,39 @@
+.addBeneficiary-container {
+  background-color: #3d3d3d;
+  min-height: 100vh;
+  padding: 10px 0;
+}
+
+.form-container {
+  background-color: #3f8f74;
+  padding: 80px 20px;
+  box-shadow: 0 0 15px rgb(29, 29, 29);
+  width: auto !important;
+  min-width: 70% !important;
+}
+
+.subNav {
+  padding-bottom: 60px;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
+
+.display-none {
+  display: none;
+}
+
+.center-align {
+  text-align: center;
+}
+
+.mediaContainer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 7px;
+  background-color: white;
+  border-radius: 10px;
+}
+.media {
+  border-radius: 5px;
+}
